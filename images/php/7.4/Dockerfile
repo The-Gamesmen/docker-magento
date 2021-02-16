@@ -87,10 +87,10 @@ RUN curl -sSLO https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mh
   && mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail
 
 RUN curl -sS https://getcomposer.org/installer | \
-  php -- --1 --install-dir=/usr/local/bin --filename=composer
+  php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN mkdir /var/www/.composer-global \
-  && composer init --working-dir=/var/www/.composer-global --no-interaction \
+  && composer init --name global/global --working-dir=/var/www/.composer-global --no-interaction \
   && composer require --working-dir=/var/www/.composer-global markshust/magento2-metapackage-devtools-cli:^1.0
 
 RUN curl -s https://packages.blackfire.io/gpg.key | apt-key add - \

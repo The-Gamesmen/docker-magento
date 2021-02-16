@@ -19,9 +19,11 @@ services:
       - appdata:/var/www/html
       - sockdata:/sock
       - ssldata:/etc/nginx/certs
+      - ~/.ssh/:/var/www/.ssh/:delegated
 
   phpfpm:
-    image: markoshust/magento-php:7.4-fpm-3
+    # image: markoshust/magento-php:7.4-fpm-3
+    build: ../images/php/7.4
     links:
       - db
     volumes: *appvolumes
