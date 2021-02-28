@@ -15,11 +15,14 @@ services:
       - db
       - phpfpm
     volumes: &appvolumes
-      - ~/.composer:/var/www/.composer:cached
+      - ~/.composer:/var/www/.composer
       - appdata:/var/www/html
       - sockdata:/sock
       - ssldata:/etc/nginx/certs
-      - ~/.ssh/:/var/www/.ssh/:delegated
+      - ~/.ssh/:/var/www/.ssh/
+      - ~/.composer:/var/www/html/var/composer_home # Magento 2 does dumb shit with sampledata:deploy command
+    extra_hosts:
+     - "host.docker.internal:host-gateway"
 
   phpfpm:
     # image: markoshust/magento-php:7.4-fpm-3
@@ -27,6 +30,8 @@ services:
     links:
       - db
     volumes: *appvolumes
+    extra_hosts:
+     - "host.docker.internal:host-gateway"
 
   db:
     image: percona:5.7
@@ -39,6 +44,8 @@ services:
 
   redis:
     image: redis:5.0-alpine
+    ports:
+      - "6379:6379"
 
   elasticsearch:
     image: markoshust/magento-elasticsearch:7.7.1-0
