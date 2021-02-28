@@ -65,7 +65,7 @@ if grep -Fxq "$magento_domain$" "/etc/hosts"; then
         [[ "$force_append_domain" != "y" || "$force_append_domain" != "n" ]] || break
     do true; done
     if [ "$force_append_domain" = "y" ]; then
-        echo "127.0.0.1 \:\:1 $magento_domain" >> "/etc/hosts"
+        sudo echo "127.0.0.1 \:\:1 $magento_domain" >> "/etc/hosts"
     fi
 else
     echo "127.0.0.1 \:\:1 $magento_domain" >> "/etc/hosts"
