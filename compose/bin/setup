@@ -6,7 +6,7 @@ source env/db.env
 # shellcheck source=../env/magento.env
 source env/magento.env
 
-BASE_URL=${1:-magento2.test}
+BASE_URL=${1:-${MAGENTO_URL:-magento2.test}}
 
 ES_HOST=elasticsearch
 ES_PORT=9200
@@ -20,6 +20,9 @@ sleep 5 #Ensure containers are started...
 echo "Copying all files from host to container..."
 rm -rf src/vendor #Clear for step below
 bin/copytocontainer --all
+
+echo "Removing env.php due to setup errors..."
+bin/rootnotty rm app/etc/env.php -f
 
 bin/clinotty chmod u+x bin/magento
 
