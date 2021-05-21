@@ -3,4 +3,5 @@ source env/magento.env
 
 bin/removeall
 bin/setup "$MAGENTO_URL"
+bin/composer install
 bin/magento setup:upgrade
