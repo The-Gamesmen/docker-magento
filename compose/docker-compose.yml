@@ -19,14 +19,19 @@ services:
       - appdata:/var/www/html
       - sockdata:/sock
       - ssldata:/etc/nginx/certs
+      #- ssldata:/usr/local/apache2/conf/certs
       - ~/.ssh/:/var/www/.ssh/
       - ~/.composer:/var/www/html/var/composer_home # Magento 2 does dumb shit with sampledata:deploy command
     extra_hosts:
      - "host.docker.internal:host-gateway"
+    environment:
+      - "PHP_IDE_CONFIG=serverName=magento2.test"
 
   phpfpm:
     # image: markoshust/magento-php:7.4-fpm-3
     build: ../images/php/7.4
+    environment:
+      - "PHP_IDE_CONFIG=serverName=magento2.test"
     links:
       - db
     volumes: *appvolumes
@@ -66,7 +71,8 @@ services:
 
   # Disabling cron by default as it uses higher CPU, enable if needed
   cron:
-    image: markoshust/magento-php:7.4-fpm-3
+    # image: markoshust/magento-php:7.4-fpm-3
+    build: ../images/php/7.4
     user: root
     command: /usr/local/bin/cronstart
     tty: true
