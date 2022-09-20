@@ -29,6 +29,7 @@ services:
       - ./src/bin:/var/www/html/bin:cached
       - ./src/lib:/var/www/html/lib:cached
       - ./src/pub:/var/www/html/pub:cached
+      - ./src/patches:/var/www/html/patches:cached
       - ./src/setup:/var/www/html/setup:cached
       - ./src/var/log:/var/www/html/var/log:cached
       - ./src/var/report:/var/www/html/var/report:cached
