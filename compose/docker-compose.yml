@@ -23,20 +23,20 @@ services:
       - ~/.ssh/:/var/www/.ssh/
       - ~/.composer:/var/www/html/var/composer_home # Magento 2 does dumb shit with sampledata:deploy command
     extra_hosts:
-     - "host.docker.internal:host-gateway"
+     - "host.docker.internal:172.17.0.1"
     environment:
-      - "PHP_IDE_CONFIG=serverName=magento2.test"
+      PHP_IDE_CONFIG: "serverName=magento2.test"
 
   phpfpm:
     # image: markoshust/magento-php:7.4-fpm-3
-    build: ../images/php/7.4
+    build: ../images/php/8.1
     environment:
-      - "PHP_IDE_CONFIG=serverName=magento2.test"
+      PHP_IDE_CONFIG: "serverName=magento2.test"
     links:
       - db
     volumes: *appvolumes
     extra_hosts:
-     - "host.docker.internal:host-gateway"
+     - "host.docker.internal:172.17.0.1"
 
   db:
     image: percona:5.7
@@ -72,7 +72,7 @@ services:
   # Disabling cron by default as it uses higher CPU, enable if needed
   cron:
     # image: markoshust/magento-php:7.4-fpm-3
-    build: ../images/php/7.4
+    build: ../images/php/8.1
     user: root
     command: /usr/local/bin/cronstart
     tty: true
