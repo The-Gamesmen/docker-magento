@@ -1,0 +1,25 @@
+#!/bin/bash
+
+enable() {
+    bin/magento dev:template-hints:enable
+    bin/magento config:set dev/debug/layout_debugger_dump_enabled_frontend 1
+    bin/magento config:set dev/debug/layout_debugger_comments_enabled_frontend 1
+    bin/magento c:f
+}
+
+disable() {
+    bin/magento dev:template-hints:disable
+    bin/magento config:set dev/debug/layout_debugger_dump_enabled_frontend 0
+    bin/magento config:set dev/debug/layout_debugger_comments_enabled_frontend 0
+    bin/magento c:f
+}
+
+firstArgLetter="$(echo "$1" | head -c 1)"
+
+if [[ $firstArgLetter == "d" ]]; then
+    disable
+elif [[ $firstArgLetter == "e" ]]; then
+    enable
+else
+    printf "Please specify either 'disable', 'enable' as an argument.\nEx: bin/debug-layout enable\n"
+fi
