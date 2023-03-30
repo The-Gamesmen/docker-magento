@@ -1,0 +1,19 @@
+#!/bin/bash
+
+bin/cli rm ./pub/static/deployed_version.txt
+bin/cli rm -rf ./pub/static/frontend
+bin/cli rm -rf ./pub/static/adminhtml
+bin/cli rm -rf ./var/generation/*
+bin/cli rm -rf ./var/di/*
+bin/cli rm -rf ./var/view_preprocessed/*
+bin/cli rm -rf ./generated/code
+bin/redis redis-cli flushall
+bin/magento cache:flush
+bin/composer install
+bin/magento setup:upgrade
+bin/magento setup:di:compile
+bin/tailwind
+bin/magento setup:static-content:deploy --language en_US --area adminhtml --no-interaction --force --no-ansi
+bin/magento setup:static-content:deploy --language en_AU --no-interaction --force --no-ansi
+bin/redis redis-cli flushall
+bin/magento cache:flush

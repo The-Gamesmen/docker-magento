@@ -1,0 +1,1 @@
+npm run --prefix src/app/design/frontend/Gamesmen/gamesmen/web/tailwind build-prod
