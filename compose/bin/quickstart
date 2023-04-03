@@ -95,6 +95,7 @@ bin/tailwind
 bin/magento setup:upgrade
 bin/magento setup:di:compile
 bin/magento app:config:import
+bin/magento config:set --scope default web/cookie/cookie_domain magento2.test
 bin/magento indexer:reindex
 bin/copyfromcontainer --all
 bin/stop
