@@ -90,6 +90,7 @@ echo "Cleaning up temporary files..."
 rm /tmp/docker-magento-dbdump.sql
 rm /tmp/docker-magento-dbfixes.sql
 
+bin/npm install --prefix app/design/frontend/Gamesmen/gamesmen/web/tailwind
 bin/tailwind
 bin/magento setup:upgrade
 bin/magento setup:di:compile
