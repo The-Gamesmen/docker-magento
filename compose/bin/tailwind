@@ -1,1 +1,2 @@
+#!/bin/bash
 bin/npm run --prefix app/design/frontend/Gamesmen/gamesmen/web/tailwind build-prod
