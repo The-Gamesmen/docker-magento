@@ -43,8 +43,8 @@ echo "Building env.php..."
 bin/setup-env
 
 bin/start --no-dev
-bin/setup-packagist-auth
 bin/copytocontainer --all
+bin/setup-packagist-auth
 bin/fixowns
 bin/fixperms
 bin/composer install
