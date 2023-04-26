@@ -33,7 +33,8 @@ services:
       #- "host.docker.internal:host-gateway"
 
   phpfpm:
-    image: markoshust/magento-php:8.1-fpm-1
+    build: ../images/php/8.1
+    # image: markoshust/magento-php:8.1-fpm-1
     volumes: *appvolumes
     env_file: env/phpfpm.env
     #extra_hosts: *appextrahosts
