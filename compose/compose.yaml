@@ -27,13 +27,13 @@ services:
       - sockdata:/sock
       - ssldata:/etc/nginx/certs
     #extra_hosts: &appextrahosts
-      ## Selenium support, replace "magento.test" with URL of your site
-      #- "magento.test:172.17.0.1"
-      ## Linux, uncomment for Xdebug capabilities:
-      #- "host.docker.internal:host-gateway"
+    ## Selenium support, replace "magento.test" with URL of your site
+    #- "magento.test:172.17.0.1"
+    ## Linux, uncomment for Xdebug capabilities:
+    #- "host.docker.internal:host-gateway"
 
   phpfpm:
-    build: ../images/php/8.1
+    build: ../images/php/8.3
     # image: markoshust/magento-php:8.1-fpm-1
     volumes: *appvolumes
     env_file: env/phpfpm.env
@@ -41,8 +41,7 @@ services:
 
   db:
     image: mariadb:10.4
-    command:
-      --max_allowed_packet=64M
+    command: --max_allowed_packet=64M
       --optimizer_use_condition_selectivity=1
       --optimizer_switch="rowid_filter=off"
     ports:
@@ -75,17 +74,17 @@ services:
   # update the bin/setup command to use the $ES_HOST variable as the value for
   # the --elasticsearch-host argument passed to bin/magento setup:install.
   elasticsearch:
-   image: markoshust/magento-elasticsearch:7.17-0
-   ports:
-     - "9200:9200"
-     - "9300:9300"
-   env_file: env/elasticsearch.env
-   environment:
-     - "discovery.type=single-node"
-     ## Avoid test failures due to small disks
-     ## More info at https://github.com/markshust/docker-magento/issues/488
-     - "cluster.routing.allocation.disk.threshold_enabled=false"
-     - "index.blocks.read_only_allow_delete"
+    image: markoshust/magento-elasticsearch:7.17-0
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    env_file: env/elasticsearch.env
+    environment:
+      - "discovery.type=single-node"
+      ## Avoid test failures due to small disks
+      ## More info at https://github.com/markshust/docker-magento/issues/488
+      - "cluster.routing.allocation.disk.threshold_enabled=false"
+      - "index.blocks.read_only_allow_delete"
 
   rabbitmq:
     image: markoshust/magento-rabbitmq:3.9-0
