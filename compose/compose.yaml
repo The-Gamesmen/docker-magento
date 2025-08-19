@@ -10,7 +10,7 @@
 ## 172.17.0.1 in this file with the result of:
 ## docker network inspect bridge --format='{{(index .IPAM.Config 0).Gateway}}'
 
-version: "3"
+## version: "3"
 
 name: "magento"
 services:
