@@ -78,7 +78,7 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
-    env_file: env/elasticsearch.env
+    env_file: env/opensearch.env
     environment:
       - "discovery.type=single-node"
       ## Avoid test failures due to small disks
@@ -87,8 +87,8 @@ services:
       - "index.blocks.read_only_allow_delete"
       ## Uncomment to set custom heap size to avoid memory errors
       - "OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g"
-      - "OPENSEARCH_INITIAL_ADMIN_PASSWORD=!Magento2!"
-      - "DISABLE_SECURITY_PLUGIN=true"
+      # - "OPENSEARCH_INITIAL_ADMIN_PASSWORD=!Magento2!"
+      # - "DISABLE_SECURITY_PLUGIN=true"
       ## Uncomment to increase the virtual memory map count
       - "max_map_count=262144"
 
