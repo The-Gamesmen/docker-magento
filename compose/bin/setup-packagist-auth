@@ -1,0 +1,8 @@
+#!/bin/bash
+
+source env/packagist.env
+
+echo "composer config repositories.private-packagist composer https://repo.packagist.com/gamesmen/" | bin/clinotty bash -
+echo "composer config repositories.packagist.org false" | bin/clinotty bash -
+echo "composer config --global --auth http-basic.repo.packagist.com ${PACKAGIST_AUTH_USERNAME} ${PACKAGIST_AUTH_PASSWORD}" | bin/clinotty bash -
+bin/clinotty [ -d "./var/composer_home" ] && bin/clinotty cp /var/www/.composer/auth.json ./var/composer_home/auth.json

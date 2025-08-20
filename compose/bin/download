@@ -1,33 +1,36 @@
-#!/bin/bash
-set -o errexit
+#!/usr/bin/env bash
 
-[ -z "$1" ] && echo "Please specify the version to download (ex. 2.0.0)" && exit
+EDITION=${1:-community}
 
-edition=${2:-community}
+# Define ANSI escape codes for colors
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
 
-if [[ "$edition" == "enterprise" ]]; then
-    rm -rf src
-    composer create-project --repository=https://repo.magento.com/ --ignore-platform-reqs magento/project-enterprise-edition="$1" src
-    exit 0
+if [ -d "./src" ]; then
+  echo "Error: The \"src\" directory is not empty. Please remove all contents within this directory and try again."
+  exit 1
 fi
 
-if [ ! -f ~/.docker-magento/magento2-"$1".tar.gz ]; then
-    mkdir -p ~/.docker-magento
-    (cd ~/.docker-magento && curl -fOL http://pubfiles.nexcess.net/magento/ce-packages/magento2-"$1".tar.gz) || true
-fi
+bin/stop
 
-# Fallback download to hypernode if archive doesn't exist on Nexcess (smaller than 1MB)
-if ! tar -tzf  ~/.docker-magento/magento2-"$1".tar.gz -O &>/dev/null; then
-    (cd ~/.docker-magento && curl -o magento2-"$1".tar.gz -fOL https://www.magento.mirror.hypernode.com/releases/magento-"$1".tar.gz) || true
-fi
+bin/start --no-dev
+[ $? != 0 ] && echo "Failed to start Docker services" && exit
 
-# Final fallback. If no archive exists, let's use Composer!
-if ! tar -tzf  ~/.docker-magento/magento2-"$1".tar.gz -O &>/dev/null; then
-    echo "Archive not found, or not yet available due to new version release."
-    echo "Attempting install with Composer..."
-    rm -rf src
-    composer create-project --repository=https://repo.magento.com/ --ignore-platform-reqs magento/project-community-edition="$1" src
+bin/setup-composer-auth
+
+bin/fixowns
+
+if [ "$EDITION" == "mageos" ]; then
+  VERSION=${2:-1.0.5}
+  bin/clinotty composer create-project --repository-url=https://repo.mage-os.org/ mage-os/project-community-edition="${VERSION}" .
 else
-    echo "Extracting magento2-$1.tar.gz to ./src"
-    mkdir -p src && tar xzf ~/.docker-magento/magento2-"$1".tar.gz -o -C src
+  VERSION=${2:-2.4.7-p3}
+  bin/clinotty composer create-project --repository=https://repo.magento.com/ magento/project-"${EDITION}"-edition="${VERSION}" .
+fi
+
+if [ $? != 0 ]; then
+    echo -e "${BLUE}Please check the installation guide at ${YELLOW}https://github.com/markshust/docker-magento#install-fails-because-project-directory-is-not-empty${BLUE} for troubleshooting.${NC}"
+else
+    bin/clinotty [ ! -f "./var/composer_home/auth.json" ] && bin/clinotty mkdir -p ./var/composer_home && bin/clinotty cp /var/www/.composer/auth.json ./var/composer_home/auth.json
 fi

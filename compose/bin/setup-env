@@ -1,0 +1,80 @@
+#!/bin/bash
+
+source env/gamesmen.env
+source env/db.env
+source env/rabbitmq.env
+source env/redis.env
+source env/elasticsearch.env
+
+AMPQ_HOST="$RABBITMQ_HOST"
+AMPQ_PORT="$RABBITMQ_PORT"
+AMQP_USER="$RABBITMQ_DEFAULT_USER"
+AMQP_PASSWORD="$RABBITMQ_DEFAULT_PASS"
+AMQP_VHOST="$RABBITMQ_DEFAULT_VHOST"
+
+CACHE_BACKEND="Magento\\Framework\\Cache\\Backend\\Redis"
+CACHE_SERVER="$REDIS_CACHE_BACKEND_SERVER"
+CACHE_PORT="6379"
+CACHE_PASSWORD=""
+CACHE_DB="$REDIS_CACHE_BACKEND_DB"
+
+PAGE_CACHE_BACKEND="Magento\\Framework\\Cache\\Backend\\Redis"
+PAGE_CACHE_SERVER="$REDIS_PAGE_CACHE_SERVER"
+PAGE_CACHE_PORT="6379"
+PAGE_CACHE_PASSWORD=""
+PAGE_CACHE_DB="$REDIS_PAGE_CACHE_DB"
+
+# Session cache doesn't use classpath to define the backend type
+SESSION_CACHE="redis"
+SESSION_CACHE_SERVER="$REDIS_SESSION_SAVE_HOST"
+SESSION_CACHE_PORT="6379"
+SESSION_CACHE_PASSWORD=""
+SESSION_CACHE_DB="2"
+
+SEARCH_ENGINE="elasticsearch7"
+SEARCH_ENGINE_HOST="$ES_HOST"
+SEARCH_ENGINE_PORT="$ES_PORT"
+
+cp env/env.php src/app/etc/env.php
+cp env/config.php src/app/etc/config.php
+
+for i in \
+    ADMIN_URL \
+    FRONTEND_URL \
+    STATIC_URL \
+    COOKIE_URL \
+    ENCRYPTION_KEY \
+    MAGENTO_ADMIN_FRONTNAME \
+    MAGENTO_DEPLOY_MODE \
+    AMPQ_HOST \
+    AMPQ_PORT \
+    AMQP_USER \
+    AMQP_PASSWORD \
+    AMQP_VHOST \
+    MYSQL_HOST \
+    MYSQL_DATABASE \
+    MYSQL_USER \
+    MYSQL_PASSWORD \
+    CACHE_BACKEND \
+    CACHE_SERVER \
+    CACHE_PORT \
+    CACHE_PASSWORD \
+    CACHE_DB \
+    PAGE_CACHE_BACKEND \
+    PAGE_CACHE_SERVER \
+    PAGE_CACHE_PORT \
+    PAGE_CACHE_PASSWORD \
+    PAGE_CACHE_DB \
+    SESSION_CACHE \
+    SESSION_CACHE_SERVER \
+    SESSION_CACHE_PORT \
+    SESSION_CACHE_PASSWORD \
+    SESSION_CACHE_DB \
+    SEARCH_ENGINE \
+    SEARCH_ENGINE_HOST \
+    SEARCH_ENGINE_PORT; \
+do
+    ESCAPED_VALUE=$(echo "${!i}" | sed -e 's/[\/&]/\\&/g')
+    sed -i "s/{$i}/$ESCAPED_VALUE/g" src/app/etc/env.php
+done
+

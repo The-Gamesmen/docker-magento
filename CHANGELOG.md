@@ -4,9 +4,453 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [52.0.2] - 2025-07-01
 
-- PHP image `8.0-fpm-develop` now available for testing purposes.
+### Fixed
+- Increase retrieves to prevent OpenSearch from failing to start on Linux [PR #1352](https://github.com/markshust/docker-magento/pull/1352)
+
+## [52.0.1] - 2025-05-12
+
+### Fixed
+- Remove UseSVE from Java Options which caused OpenSearch to fail [PR #1341](https://github.com/markshust/docker-magento/pull/1341)
+
+## [52.0.0] - 2025-04-18
+
+This release adds support for the latest message broker and database technologies required for Magento 2.4.8, optimizes container health checks, and fixes OpenSearch issues on Linux.
+
+### Added
+- Added support for Valkey 8.1 (Redis successor) for Magento 2.4.8 compatibility [PR #1327](https://github.com/markshust/docker-magento/pull/1327)
+- Added RabbitMQ 4.1 support for Magento 2.4.8 compatibility [PR #1326](https://github.com/markshust/docker-magento/pull/1326)
+- Added documentation for OpenSearch ARM64/Apple M-series compatibility workaround [PR #1316](https://github.com/markshust/docker-magento/issues/1316)
+
+### Updated
+- Updated MariaDB to version 11.4 [PR #1325](https://github.com/markshust/docker-magento/pull/1325)
+- Updated MySQL configuration for 8.4 compatibility [PR #1324](https://github.com/markshust/docker-magento/pull/1324)
+- Optimized container health checks with YAML anchors for consistency across services [PR #1330](https://github.com/markshust/docker-magento/pull/1330)
+- Added `log_bin_trust_function_creators=1` flag to both MariaDB and MySQL configurations [PR #1329](https://github.com/markshust/docker-magento/pull/1329)
+
+### Fixed
+- Fixed OpenSearch startup issues on Linux [PR #1316](https://github.com/markshust/docker-magento/issues/1316)
+- Fixed PHP 8.4 tag reference in README documentation [PR #1328](https://github.com/markshust/docker-magento/pull/1328)
+
+### Removed
+- Dropped support for RabbitMQ 3.8 [PR #1326](https://github.com/markshust/docker-magento/pull/1326)
+
+## [51.0.0] - 2025-04-08
+
+This release provides full support for Magento 2.4.8 (released same day), includes multiple Docker image updates, fixes important bugs, and adds several new utilities for improved developer experience.
+
+### Added
+- New `bin/docker-start` helper script to automatically start Docker Desktop or OrbStack environments [PR #956](https://github.com/markshust/docker-magento/pull/956)
+- Enhanced cron management that maintains state between container restarts [PR #1309](https://github.com/markshust/docker-magento/pull/1309)
+- Compatibility settings for Elasticsearch and OpenSearch on ARM64/Apple M-series chips [PR #1307](https://github.com/markshust/docker-magento/pull/1307)
+- Relocated Selenium service configuration to `compose.dev.yaml` for better organization [PR #913](https://github.com/markshust/docker-magento/pull/913)
+- Firefox Developer Edition support for SSL certificates [PR #830](https://github.com/markshust/docker-magento/pull/830)
+
+### Updated
+- Upgraded Node.js to version 22.x across all PHP images [PR #1305](https://github.com/markshust/docker-magento/pull/1305)
+- Upgraded PHP extensions: Redis to 6.2.0, Swoole to 6.0.2, Xdebug to 3.4.2 [PR #1305](https://github.com/markshust/docker-magento/pull/1305)
+- Updated Composer to 2.8.6 in PHP 8.2, 8.3, and 8.4 images [PR #1305](https://github.com/markshust/docker-magento/pull/1305)
+- Updated SPX PHP profiler to version 0.4.18 [PR #1305](https://github.com/markshust/docker-magento/pull/1305)
+- Increased client max body size limit to 100M in nginx configuration [PR #1307](https://github.com/markshust/docker-magento/pull/1307)
+- Improved SSL certificate handling for multi-domain setups [PR #1300](https://github.com/markshust/docker-magento/pull/1300)
+
+### Fixed
+- OpenSearch and Elasticsearch container failures on ARM64/Apple Silicon devices [PR #1307](https://github.com/markshust/docker-magento/pull/1307)
+- Cron service unexpectedly failing to restart after being enabled [PR #1309](https://github.com/markshust/docker-magento/pull/1309)
+- Multiple domain support in SSL certificate generation [PR #1257](https://github.com/markshust/docker-magento/pull/1257)
+- Typo in README documentation [PR #1296](https://github.com/markshust/docker-magento/pull/1296)
+- Reorganized backend access documentation for better visibility [PR #1306](https://github.com/markshust/docker-magento/pull/1306)
+
+## [50.0.0] - 2024-01-31
+
+### Added
+- Added `generated` and `var` folders as mounted directories in `compose.dev.yaml` for easier debugging [PR #1284](https://github.com/markshust/docker-magento/pull/1284)
+- Added options to `php.ini` to allow for automatic Xdebug profiling [PR #1284](https://github.com/markshust/docker-magento/pull/1284)
+
+### Updated
+- Mailcatcher tagged to version 0.10.0 [PR #912](https://github.com/markshust/docker-magento/pull/912)
+- Xdebug to version 3.4.1 [PR #1285](https://github.com/markshust/docker-magento/pull/1285)
+- Swoole to version 6.0.0 [PR #1285](https://github.com/markshust/docker-magento/pull/1285)
+
+## [49.0.0] - 2024-01-15
+
+### Updated
+- Enhanced `bin/xdebug` script with more comprehensive mode management and validation, supporting all Xdebug modes (off, develop, coverage, debug, gcstats, profile, trace) and combinations [PR #1276](https://github.com/markshust/docker-magento/pull/1276)
+
+## [48.0.1] - 2024-12-07
+
+### Fixed
+- Unit test scripts [PR #1263](https://github.com/markshust/docker-magento/pull/1263)
+
+## [48.0.0] - 2024-11-27
+
+This release introduces significant enhancements to the development environment, including a new PHP 8.4 Docker image for early adopters and developers wanting to test future compatibility. The MageOS support has been substantially improved, and a new RabbitMQ 3.13 image has been added. Several quality-of-life improvements have been implemented, such as better unit testing tools, enhanced SSL generation for multi-site setups, and comprehensive documentation updates. A notable breaking change is the shift in the download command syntax - it now expects the edition type before the version number (ex: `bin/download community 2.4.7-p3` instead of the previous `bin/download 2.4.7 community`). Additionally, all Docker images have been updated to maintain parity with current Magento version requirements.
+
+### Added
+- New PHP 8.4 Docker image for development purposes [PR #1252](https://github.com/markshust/docker-magento/pull/1252)
+- New RabbitMQ 3.13 Docker image [PR #1252](https://github.com/markshust/docker-magento/pull/1252)
+- Backend login credentials and 2FA setup instructions to README [PR #1205](https://github.com/markshust/docker-magento/pull/1205)
+- PHP FTP extension to Docker setup [PR #1210](https://github.com/markshust/docker-magento/pull/1210)
+- PhpMyAdmin credentials to README [PR #1212](https://github.com/markshust/docker-magento/pull/1212)
+- `bin/test` helper scripts to execute unit tests [PR #1157](https://github.com/markshust/docker-magento/pull/1157)
+- `bin/ece-patches` command [PR #1171](https://github.com/markshust/docker-magento/pull/1171)
+- rsync to PHP images for Deployer support [PR #1163](https://github.com/markshust/docker-magento/pull/1163)
+- PhpMyAdmin for Linux [PR #1177](https://github.com/markshust/docker-magento/pull/1177)
+
+### Updated
+- Improved MageOS support [PR #1246](https://github.com/markshust/docker-magento/pull/1246)
+- System requirements helper script overhauled for easier use and maintenance [PR #1242](https://github.com/markshust/docker-magento/pull/1242)
+- Supported versions in `bin/check-dependencies` script [PR #1175](https://github.com/markshust/docker-magento/pull/1175)
+- Docker images for Magento version parity [PR #1252](https://github.com/markshust/docker-magento/pull/1252)
+- Bumped docker/build-push-action from 5 to 6 [PR #1174](https://github.com/markshust/docker-magento/pull/1174)
+- GitHub Actions to use release/next branch [PR #1254](https://github.com/markshust/docker-magento/pull/1254)
+- Speed improvement for `bin/xdebug` command [PR #1245](https://github.com/markshust/docker-magento/pull/1245)
+
+### Fixed
+- Code duplication [PR #1141](https://github.com/markshust/docker-magento/pull/1141)
+- Empty directory check moved to top of scripts [PR #1143](https://github.com/markshust/docker-magento/pull/1143)
+- Elasticsearch container issues [PR #1166](https://github.com/markshust/docker-magento/pull/1166)
+- Multi-site SSL generation support [PR #1200](https://github.com/markshust/docker-magento/pull/1200)
+- Various typos in files [PR #1238](https://github.com/markshust/docker-magento/pull/1238)
+
+## [47.0.1] - 2024-04-25
+
+### Fixed
+- "The current directory is not empty" message appearing on new install [PR #1141](https://github.com/markshust/docker-magento/pull/1141).
+
+## [47.0.0] - 2024-04-25
+
+### Added
+- Check to ensure directory does not already exist in project directory [PR #1127](https://github.com/markshust/docker-magento/pull/1127).
+
+### Updated
+- Remove obsolete version directive from docker compose files [PR #1125](https://github.com/markshust/docker-magento/pull/1125).
+- Predefined version from 2.4.6-p4 to 2.4.7 [PR #1128](https://github.com/markshust/docker-magento/pull/1128).
+- Integration testing configuration to use OpenSearch [PR #1131](https://github.com/markshust/docker-magento/pull/1131).
+
+### Fixed
+- SSL cert generation when domain has a port included [PR #1136](https://github.com/markshust/docker-magento/pull/1136).
+- OpenSearch container fails to start due to memory heap size configuration [PR #1137](https://github.com/markshust/docker-magento/pull/1137).
+
+## [46.1.1] - 2024-04-16
+
+### Fixed
+- Xdebug 3.3.1 and Blackfire PHP extension incompatibility [PR #1122](https://github.com/markshust/docker-magento/pull/1122).
+
+## [46.1.0] - 2024-04-13
+
+### Added
+- New `bin/blackfire` script to enable, disable, or check status of Blackfire extension [PR #1115](https://github.com/markshust/docker-magento/pull/1115).
+- Swool PHP extension to all PHP Docker images to support Adobe Commerce GraphQL Application Layer [PR #1114](https://github.com/markshust/docker-magento/pull/1114).
+
+### Updated
+- Supported versions in the `bin/check-dependencies` script [PR #1112](https://github.com/markshust/docker-magento/pull/1112).
+
+### Fixed
+- Random 502 Bad Gateway errors when Xdebug is enabled [PR #1085](https://github.com/markshust/docker-magento/pull/1085), [PR #1116](https://github.com/markshust/docker-magento/pull/1116).
+
+## [46.0.0] - 2024-04-09
+
+### Added
+- New `bin/check-dependencies` script which provides helpful recommendations for dependencies tailored to the chosen Magento version [PR #1018](https://github.com/markshust/docker-magento/pull/1018/files).
+- New `nginx` Docker images for versions 1.22, 1.24 [PR #1019](https://github.com/markshust/docker-magento/pull/1109).
+- New `php-fpm` 8.3 Docker image for Magento 2.4.7 support [PR #1019](https://github.com/markshust/docker-magento/pull/1109).
+- New `opensearch` 2.12 Docker image for Magento 2.4.7 support [PR #1019](https://github.com/markshust/docker-magento/pull/1109).
+- New `elasticsearch` 7.16 and 8.11 Docker images for previous Magento versions support [PR #1019](https://github.com/markshust/docker-magento/pull/1109).
+- New `elasticsearch` 8.13 Docker image for Magento 2.4.7 support [PR #1019](https://github.com/markshust/docker-magento/pull/1109).
+- New `rabbitmq` 3.8 Docker image for previous Magento versions support [PR #1019](https://github.com/markshust/docker-magento/pull/1109).
+- New `rabbitmq` 3.12 Docker image for Magento 2.4.7 support [PR #1019](https://github.com/markshust/docker-magento/pull/1109).
+
+### Updated
+- Link `php-fpm` Docker images to officially compatible Composer versions [PR #1019](https://github.com/markshust/docker-magento/pull/1109).
+
+## [45.1.0] - 2024-03-19
+
+### Added
+- New `bin/configure-linux` helper script to assist with easier Linux setup [PR #1016](https://github.com/markshust/docker-magento/pull/1016).
+- Linux dependencies to README [PR #1050](https://github.com/markshust/docker-magento/pull/1050).
+- Added `bin/create-user` script to allow for easy creation of Magento admin user & customer [PR #1040](https://github.com/markshust/docker-magento/pull/1040).
+- Descriptions for all missing helper scripts to README and Makefile [PR #1096](https://github.com/markshust/docker-magento/pull/1096).
+
+### Updated
+- `bin/docker-stats` to simplified output [PR #1083](https://github.com/markshust/docker-magento/pull/1083).
+- Pinned Composer version for increased compatibility with latest Magento versions [PR #1090](https://github.com/markshust/docker-magento/pull/1090).
+
+## [45.0.0] - 2024-02-25
+
+### Added
+- New PHP images based on bookworm, pegging pecl libraries for more predictability [PR #1071](https://github.com/markshust/docker-magento/pull/1071).
+- New PHP 8.3 image [PR #1071](https://github.com/markshust/docker-magento/pull/1071).
+- PHP SPX profiler to enhance performance monitoring capabilities [PR #533](https://github.com/markshust/docker-magento/pull/533).
+- Support for the `strace` command, providing developers with powerful tools for diagnosing and troubleshooting [PR #1033](https://github.com/markshust/docker-magento/pull/1033).
+- Ability for xdebug to listen to Magento CLI commands [PR #846](https://github.com/markshust/docker-magento/pull/846).
+- Abstraction of setup script into two scripts [PR #874](https://github.com/markshust/docker-magento/pull/874).
+- New Docker image for OpenSearch 2.4 [PR #858](https://github.com/markshust/docker-magento/pull/858).
+- Mage-OS mirror support [PR #835](https://github.com/markshust/docker-magento/pull/835).
+- New `bin/log` command to view Magento logs in real-time [PR #1060](https://github.com/markshust/docker-magento/pull/1060).
+- New `bin/docker-stats` command for container monitoring [PR #533](https://github.com/markshust/docker-magento/pull/533).
+- New `bin/setup-pwa-studio-sampledata` command to install Magento PWA Studio sample data, facilitating easier PWA development setups [#1045](https://github.com/markshust/docker-magento/pull/1045).
+- New `bin/deploy` script to deply Magento in pipeline [PR #926](https://github.com/markshust/docker-magento/pull/926).
+- New `bin/magento-version` script which outputs current Magento version [PR #931](https://github.com/markshust/docker-magento/pull/931).
+- New `bin/spx` script to enable or disable SPX [PR #1074](https://github.com/markshust/docker-magento/pull/1074).
+
+### Updated
+- Node.js to version 20.x LTS [PR #1071](https://github.com/markshust/docker-magento/pull/1071).
+- Support for Magento 2.4.6-p4, updating the default Magento version in the Docker setup to align with the latest Magento release [PR #1063](https://github.com/markshust/docker-magento/pull/1063).
+- Continuous integration and deployment processes were refined to include updates and to maintain dependencies through GitHub Actions and Dependabot, ensuring that the project's dependencies remain up to date and secure [PR #1032](https://github.com/markshust/docker-magento/pull/1032).
+- Rework docker compose script to allow future extensibility [PR #1002](https://github.com/markshust/docker-magento/pull/1002).
+- Replaced phpmyadmin Docker image with amd64-compatible image [PR #939](https://github.com/markshust/docker-magento/pull/939).
+- Set default Magento 2.4.6 search engine to OpenSearch [PR #937](https://github.com/markshust/docker-magento/pull/937).
+- Use `/usr/bin/env` to discover bash location [PR #879](https://github.com/markshust/docker-magento/pull/879).
+
+### Fixed
+- Execution rights in scripts [PR #1039](https://github.com/markshust/docker-magento/pull/1039).
+- Bug with Elasticsearch documentation [PR #1014](https://github.com/markshust/docker-magento/pull/1014).
+- Elasticsearch JAVA OPTS issue with containers not starting at startup [PR #938](https://github.com/markshust/docker-magento/pull/938).
+- Unexpected Ubuntu 18.04 startup failure [PR #310](https://github.com/markshust/docker-magento/pull/310).
+- Failing `npm install` of puppeteer due to missing Chromium [PR #848](https://github.com/markshust/docker-magento/pull/848).
+
+## [44.0.0] - 2022-12-05
+
+### Added
+- Allow more variables for the PhpStan analyse script [PR #789](https://github.com/markshust/docker-magento/pull/789).
+- New bin/docker-compose script to abstract away calls to docker-compose [PR #787](https://github.com/markshust/docker-magento/pull/787).
+- Support for Docker Compose V2 ("docker compose" and backwards-compatibility for "docker-compose") [PR #787](https://github.com/markshust/docker-magento/pull/787).
+- New Docker Compose healthcheck [PR #384](https://github.com/markshust/docker-magento/pull/384).
+- MageOS support [4591b68c](https://github.com/markshust/docker-magento/commit/4591b68c46667d4015e728392b813ec42939ae67).
+- Documentation to recover from failed install [#816](https://github.com/markshust/docker-magento/issues/816).
+- OpenSearch support [PR #680](https://github.com/markshust/docker-magento/pull/680).
+- New build for Elasticsearch 7.17 [c45f05c3](https://github.com/markshust/docker-magento/commit/c45f05c370fe1347afa35117511794f736710f71).
+
+### Updated
+- Rename docker-compose.yml to compose.yaml (preferred) [PR #799](https://github.com/markshust/docker-magento/pull/799).
+- Readme file with new info on configuring Xdebug in WSL2 environments [PR #810](https://github.com/markshust/docker-magento/pull/810).
+
+### Fixed
+- Lowered RAM check on setup [#720](https://github.com/markshust/docker-magento/issues/720).
+
+### Removed
+- Deprecated PHP 7.4 due to all versions < Magento 2.4.4 reaching EOL [3a64324e](https://github.com/markshust/docker-magento/commit/3a64324e08f3d15e3c3ce86b5c0f5e7ebb635a75).
+
+## [43.2.0] - 2022-09-13
+
+### Added
+- Added phpmyadmin to docker-compose.dev.yml file [PR #772](https://github.com/markshust/docker-magento/pull/772).
+
+## [43.1.0] - 2022-09-13
+
+### Added
+- Support for Grunt + LiveReload [#430](https://github.com/markshust/docker-magento/issues/430).
+
+## [43.0.0] - 2022-05-26
+
+### Added
+- Fall back to PHP 7.4 for Magento versions older than 2.4.4 [PR #685](https://github.com/markshust/docker-magento/pull/685) [PR #710](https://github.com/markshust/docker-magento/pull/710).
+- Checksum flag to rsync in `bin/update` [PR #707](https://github.com/markshust/docker-magento/pull/707).
+- New `bin/analyse` command to statically analyse code with PHPStan [8601c2f7](https://github.com/markshust/docker-magento/commit/8601c2f73cc6f1d2534f017c8f31eec49b0e00fc).
+- `node` & `npm` to PHP images [#694](https://github.com/markshust/docker-magento/issues/694).
+
+### Updated
+- Magento download to default to 2.4.4 [151dc09a](https://github.com/markshust/docker-magento/commit/151dc09ae95a5cff75598c366f3d77efa58098d5)
+- Prevent domain duplication in `/etc/hosts` [PR #693](https://github.com/markshust/docker-magento/pull/693).
+- Replace buster images with bullseye to properly fix Apple M1 5-sec delay [#636](https://github.com/markshust/docker-magento/issues/636).
+
+## [42.0.0] - 2022-04-14
+
+This release brings streamlined PHP Docker images (saving 300MB on previous images), a brand new PHP 8.1 image with full support for Magento 2.4.4, a proper Elasticsearch health check during setup, and ability to detect memory assigned to Docker on startup (which will prevent failed installations). Elasticsearch, Redis & RabbitMQ Docker images have also all been updated to their recently supported Magento versions.
+
+### Added
+- New Docker image for PHP 8.1 [903f9867](https://github.com/markshust/docker-magento/commit/903f9867aa130100267290feaa03b1b48b157337).
+- New Docker image for Elasticsearch 7.16 [f70a1565](https://github.com/markshust/docker-magento/commit/f70a1565bddd56a3abe8df52d4122dbcdc85d98a).
+- New Docker image for RabbitMQ 3.9 [7711365c](https://github.com/markshust/docker-magento/commit/7711365cb73aab685859e3e34fc23774937a4e2a).
+- Elasticsearch health check timeout when installing Magento [#675](https://github.com/markshust/docker-magento/pull/675).
+- Ability to detect if memory usage is too low [#527](https://github.com/markshust/docker-magento/issues/527).
+
+### Updated
+- PHP 7.4 Docker image for parity with PHP 8.1 image [481097b3](https://github.com/markshust/docker-magento/commit/481097b3f9184d19deb102b901b43af906ebb256).
+
+### Removed
+- ionCube support from PHP 7 image in order to retain Docker image parity between versions, to slim down image size, and because I no longer want to support encrypted or obfuscated code in my open source projects. Feel free to pull, fork or modify if you still need ionCube in your projects.
+
+## [41.1.0] - 2022-03-28
+
+### Fixed
+- Increased RabbitMQ sleep timeout to prevent errors on startup [#426](https://github.com/markshust/docker-magento/issues/426).
+- RabbitMQ connection issues on Windows/WSL2 [#426](https://github.com/markshust/docker-magento/issues/426).
+- Problem with elasticsearch & unexpected character [#597](https://github.com/markshust/docker-magento/issues/597).
+- Issue with extra_hosts host.docker.internal for Xdebug on Linux [#595](https://github.com/markshust/docker-magento/issues/595).
+- Reverted Xdebug/magerun code refactor which caused issues [#595](https://github.com/markshust/docker-magento/pull/545).
+- Composer auth.json auth required message shows after authenticating [#587](https://github.com/markshust/docker-magento/issues/587).
+- Failing shellchecks [08206e6d](https://github.com/markshust/docker-magento/commit/08206e6d6a48fdb3c1c3adc8f52b146609ba771c), [53d9b858](https://github.com/markshust/docker-magento/commit/53d9b8585733f8f78a5dcaedce53a83863a1b634).
+- Firefox SSL cert fails on first-time install [2695fe2e](https://github.com/markshust/docker-magento/commit/2695fe2e508098906103dd442767d50e9f6011c0).
+- Some commands including bin/xdebug not working on Windows + Docker Desktop 4.4.3 [#619](https://github.com/markshust/docker-magento/issues/619).
+
+### Updated
+- Redis 5.0 to 6.0 [6653d787](https://github.com/markshust/docker-magento/commit/6653d78722fb8d1d76cc2433a89227456e48514f).
+- `bin/setup` script so it can run completely automated [PR #633](https://github.com/markshust/docker-magento/pull/633).
+- PHP 8 image to 8.1.4, last version before tagging final release [86093b70](https://github.com/markshust/docker-magento/commit/86093b70c9ee7f0ed3c62e84460b7e53926d033c).
+
+### Added
+- `bin/stopall` script to stop all running containers [#599](https://github.com/markshust/docker-magento/pull/599).
+- New PHP image to enable WebP support in GD [PR #651](https://github.com/markshust/docker-magento/pull/651).
+- Ability to configure custom user/group ID in Nginx image [PR #658](https://github.com/markshust/docker-magento/pull/658).
+
+### Removed
+- PHP 7.3 images have been deprecated due to 7.3's EOL.
+- EXPOSE statement from PHP image (unneeded) [790e2fe0](https://github.com/markshust/docker-magento/commit/790e2fe0293feb12455d7f9ed2593aa97ad6df99).
+
+## [41.0.2] - 2021-12-09
+
+### Fixed
+- Disable "Composer is slower because of Xdebug" message [1990d84](https://github.com/markshust/docker-magento/commit/1990d84).
+- Updated verbiage in setup on how to start cron [c3ba47d](https://github.com/markshust/docker-magento/commit/1990d84).
+- Fixed "The input device is not a TTY" error during setup [8aada97](https://github.com/markshust/docker-magento/commit/8aada97).
+- Expose port 9003 on PHP Docker image for Xdebug [263e40d](https://github.com/markshust/docker-magento/commit/263e40d).
+- Disable Xdebug by default for PHP 7.3 [263e40d](https://github.com/markshust/docker-magento/commit/263e40d).
+
+### Updated
+- Updated PHP 8.1 image to use official GA version [263e40d](https://github.com/markshust/docker-magento/commit/263e40d).
+
+## [41.0.1] - 2021-11-09
+
+### Fixed
+- Fixed additional issue of waiting for Elasticsearch/RabbitMQ connection on Mac [#442](https://github.com/markshust/docker-magento/issues/442).
+
+## [41.0.0] - 2021-11-08
+
+There has been an ongoing issue with Docker for Mac + M1 chips (Apple Silicon) which causes a 5-second delay in network requests (see [#5626](https://github.com/docker/for-mac/issues/5626)). A fix has been implemented in this release that works around this issue, adding `extra_hosts` directives in the `docker-compose.yml` file. This update should be backwards-compatible, but will break existing setups that use custom Docker networks (this is an uncommon scenario). See notes at the top of `docker-compose.yml` for how to configure this project for custom Docker networks.
+
+### Added
+- Added Imagick PHP extension [#530](https://github.com/markshust/docker-magento/issues/530).
+
+### Fixed
+- Fixed issue with onelinesetup script failing on download [92b803c](https://github.com/markshust/docker-magento/commit/92b803c) [67c76b4](https://github.com/markshust/docker-magento/commit/67c76b4).
+- Fix Shellcheck failures for bin/setup-ssl-ca [#558](https://github.com/markshust/docker-magento/issues/558).
+- Fix wrong `sendmail_path` in php.ini [#556](https://github.com/markshust/docker-magento/issues/556).
+- Ensure .composer directory isn't created by root [#562](https://github.com/markshust/docker-magento/issues/562).
+- Fixed `bin/devconsole` command not working [646f617](https://github.com/markshust/docker-magento/commit/646f617).
+- Fixed `bin/setup-composer-auth` does not persist auth creds [#567](https://github.com/markshust/docker-magento/issues/567).
+- Fixed documentation around Xdebug port on Linux [90af7fa](https://github.com/markshust/docker-magento/commit/90af7fa).
+- Fixed waiting for Elasticsearch/RabbitMQ connection on Mac [#442](https://github.com/markshust/docker-magento/issues/442).
+
+### Updated
+- Updated info about MySQL backups and existing projects in README [86faa70](https://github.com/markshust/docker-magento/commit/86faa70).
+- Updated README for Xdebug + PhpStorm [b1fe812](https://github.com/markshust/docker-magento/commit/b1fe812).
+
+## [40.1.0] - 2021-10-29
+
+### Fixed
+- Fixed issues with onelinesetup script [#564](https://github.com/markshust/docker-magento/issues/564).
+- Fixed Shellcheck failures for bin/setup-ssl-ca [#558](https://github.com/markshust/docker-magento/issues/558).
+- Fixed php.ini possible wrong smtp-addr [#556](https://github.com/markshust/docker-magento/issues/556).
+- Ensure files are created so Docker doesn't create them as root [#562](https://github.com/markshust/docker-magento/issues/562).
+- Added additional time for Elasticsearch container to get initialized during setup.
+
+## [40.0.2] - 2021-10-20
+
+### Fixed
+- Fixed Selenium configuration for MFTF [PR #554](https://github.com/markshust/docker-magento/pull/554).
+
+## [40.0.1] - 2021-10-20
+
+### Fixed
+- Fixed PHP image `8.0-fpm-develop` for Magento 2.4.4 support (note: still has `-develop` tag).
+
+### Updated
+- Moved `~/.ssh` volume mount references to `docker-compose.yml` to ease maintenance.
+
+## [40.0.0] - 2021-10-15
+
+This is one of the biggest releases of docker-magento 💥! This major update includes support for Apple Silicon (M1/M1X) chips, as well as SSH support for fully native filesystem speed.
+
+All the images are now multi-arch builds, meaning they can install on both AMD & ARM chipsets. Additionally, by setting up your IDE to connect to Docker over SSH/SFTP to avoid selective filesystem syncing.
+
+The docker-compose configuration files have also been streamlined & simplified, with dedicated files for both SSH and Linux setups. Read more about these updates at https://github.com/markshust/docker-magento#ssh and https://github.com/markshust/docker-magento#linux respectively.
+
+Many issues have been resolved, and long-standing pull requests have been merged. A special thanks to [@drpayyne](https://github.com/drpayyne) for multi-arch support, [@rangerz](https://github.com/rangerz) for their massive contributions, as well as many others for their continued work & pull requests submitted to this project.
+
+### Updated
+- Updated `onelinesetup` script to use version `2.4.3-p1` by default.
+- Updated `bin/cache-clean` with improved logic [PR #400](https://github.com/markshust/docker-magento/pull/400).
+- Simplified `docker-compose.dev.yml` file to only contain volume mounting information.
+
+### Added
+- Added new `mailcatcher` image to replace `mailhog` for multi-arch support [#511](https://github.com/markshust/docker-magento/issues/511).
+- Added `docker-compose.dev-ssh.xml` to streamline SSH setup.
+- Added `docker-compose.dev-linux.xml` to streamline Linux setup.
+- Added GitHub workflows for multi-arch build support [#396](https://github.com/markshust/docker-magento/issues/396).
+- Added multi-arch support for Nginx [PR #515](https://github.com/markshust/docker-magento/pull/515).
+- Added multi-arch support for PHP [PR #516](https://github.com/markshust/docker-magento/pull/516).
+- Added new `bin/setup-domain` script [PR #429](https://github.com/markshust/docker-magento/pull/429).
+- Added Basic MFTP Setup information [PR #269](https://github.com/markshust/docker-magento/pull/269).
+- Make uid & gid of app user configurable [#520](https://github.com/markshust/docker-magento/pull/520).
+- Added Makefile with list of available commands [#399](https://github.com/markshust/docker-magento/pull/399).
+- Xdebug 3 support for `bin/n98-magerun2` [#545](https://github.com/markshust/docker-magento/pull/545).
+
+### Fixed
+- Fixed SSL setup failing on Linux [#222](https://github.com/markshust/docker-magento/issues/222).
+- Fixed locale code for `bin/setup-grunt` [#484](https://github.com/markshust/docker-magento/pull/484).
+- Fixed cron not working [#540](https://github.com/markshust/docker-magento/issues/540).
+
+## [39.1.0] - 2021-09-21
+
+### Updated
+- Replace MailHog with Mailcatcher for multi-arch compatibility [#511](https://github.com/markshust/docker-magento/issues/511).
+
+## [39.0.2] - 2021-09-21
+
+### Fixed
+- Fixed placement of enabling developer mode within bin/setup.
+
+## [39.0.1] - 2021-09-21
+
+### Fixed
+- Connection to Redis fails without php-redis extension [#474](https://github.com/markshust/docker-magento/issues/474).
+
+## [39.0.0] - 2021-09-21
+
+### Added
+- New Elasticsearch Docker images `7.9`, `7.9.3-0` [#488](https://github.com/markshust/docker-magento/issues/488).
+
+### Updated
+- Replace Percona DB with MariaDB 10.4 [#514](https://github.com/markshust/docker-magento/issues/514).
+- Updated RabbitMQ image to 3.8.
+
+### Fixed
+- Resolve cron install script not in bin/setup [#420](https://github.com/markshust/docker-magento/issues/420).
+- Update Elasticsearch settings to fix catalog search index error [#488](https://github.com/markshust/docker-magento/issues/488).
+
+## [38.0.0] - 2021-07-27
+
+### Added
+- Composer 2 support [#409](https://github.com/markshust/docker-magento/issues/409).
+
+### Fixed
+- Composer `auth.json` not properly set after installation [#42](https://github.com/markshust/docker-magento/issues/42).
+- `bin/remove` not removing containers in newer versions of Docker Compose.
+- Invalid template error with Docker 3.5.1 [#486](https://github.com/markshust/docker-magento/issues/486).
+
+## [37.0.2] - 2021-02-17
+
+### Added
+- New `bin/setup-composer-auth` file to setup Composer auth creds.
+
+## [37.0.1] - 2021-02-15
+
+### Fixed
+- Fix onelinesetup script bug.
+
+## [37.0.0] - 2021-02-14
+
+### Added
+- Official support for Xdebug 3 [#390](https://github.com/markshust/docker-magento/issues/390). The new PHP images are `7.3-fpm-12` & `7.4-fpm-5`.
+- If you need to still use Xdebug 2, update your docker-compose.yml files to instead look at PHP image `7.3-fpm-11` or `7.4-fpm-4`. These images are exactly the same other than being pegged to Xdebug 2.
+
+## [36.0.2] - 2021-02-14
+
+### Updated
+- Reverted Xdebug to version 2 for backwards-compatible support [#390](https://github.com/markshust/docker-magento/issues/390).
 
 ## [36.0.1] - 2021-02-04
 
@@ -242,7 +686,7 @@ Happy new year! 🎉
 - Fixed logic of `bin/copyfromcontainer` and `bin/copytocontainer` so subdirectories are now properly copied from and to the container
 
 ### Added
-- The `bin/fixowns` script now includes the ability to fix ownerships at the subdirectory level 
+- The `bin/fixowns` script now includes the ability to fix ownerships at the subdirectory level
 - The `bin/copyfromcontainer` and `bin/copytocontainer` scripts now fixes permissions and ownerships of just the subdirectories that are copied
 
 ## [24.1.2] - 2019-10-15
@@ -378,7 +822,7 @@ Happy new year! 🎉
   - If you need access to specific files that are created within the container and are not host bind mounted, you can use `bin/cli` or `bin/bash` commands to go into the container to access the files. You can also use the new `bin/copyfromcontainer` and `bin/copytocontainer` bin helper scripts to copy files & folders from or to containers.
   - If you need to host bind mount files or folders, feel free to do so within the `docker-compose.dev.yml` file! Just be aware there is a performance penalty for doing so.
 - Updated `nginx` Docker image to look for `nginx.conf` file instead of `nginx.conf.sample` file. This will now require copying the `nginx.conf.sample` file to `nginx.conf`, or using a host bind mount. This location allows overrides that aren't overridden when you upgrade Magento, and allow customizations for projects. Tagged new image as `markoshust/magento-nginx:1.13-7`.
-- The `bin/setup` helper script uses ohly the `docker-compose.yml` file, with only native docker volume mounts.
+- The `bin/setup` helper script uses only the `docker-compose.yml` file, with only native docker volume mounts.
 - The `bin/start` helper script uses both `docker-compose.yml` and `docker-compose.dev.yml` files. Development-only specifications should now be placed within `docker-compose.dev.yml`, such as host bind volume mounts.
 - The `docker-compose.yml` file now uses a `sockdata` volume mount to mount the `/sock` directory. You may need to delete the `appdata` volume mount (`docker volume rm NAME`) and rebuild it with `bin/copytocontainer --all`.
 - Removed call to `bin/fixperms` within `bin/setup` to speed up initial installation.
@@ -455,7 +899,7 @@ Happy new year! 🎉
 ## [17.0.1] - 2018-10-06
 
 ### Removed
-- Removed bind mount of vendor folder introduced in 16.2.0 due to inconsistency issues. Update cominmg soon that will implement new method of bind mounting.
+- Removed bind mount of vendor folder introduced in 16.2.0 due to inconsistency issues. Update coming soon that will implement new method of bind mounting.
 
 ## [17.0.0] - 2018-09-06
 

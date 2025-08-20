@@ -1,0 +1,104 @@
+#!/bin/bash
+
+VERSION=${1:-2.4.5}
+EDITION=${2:-enterprise}
+
+source env/packagist.env
+source env/magento.env
+
+function ask_yes_or_no() {
+    read -p "$1 ([y]es or [N]o): "
+    case $(echo $REPLY | tr '[A-Z]' '[a-z]') in
+        y|yes) echo "yes" ;;
+        *)     echo "no" ;;
+    esac
+}
+
+if [ -d src ]; then
+  if [ "yes" == $(ask_yes_or_no "Source directory already exists, do you want to overwrite?") ]; then
+    rm -rf src
+  else
+    exit
+  fi
+fi
+
+if [ ! -f env/dbdump.gz ] && [ ! -f env/dbdump.sql ]; then
+  echo "Database dump env/dbdump.gz or enb/dbdump.sql does not exist, exiting!"
+  exit
+fi
+
+if [ ! -f env/env.php ]; then
+  echo "Missing env.php! Exiting..."
+  exit
+fi
+
+if [ ! -f env/config.php ]; then
+  echo "Missing config.php! Exiting..."
+  exit
+fi
+
+rm -rf src
+git clone git@github.com:The-Gamesmen/magento2.git src
+
+echo "Building env.php..."
+bin/setup-env
+
+bin/start --no-dev
+bin/copytocontainer --all
+bin/setup-packagist-auth
+bin/fixowns
+bin/fixperms
+bin/composer install
+
+if [ -e /tmp/docker-magento-dbdump.sql ]; then
+  echo "Cleaning up old temporary file..."
+  rm /tmp/docker-magento-dbdump.sql
+fi
+
+touch /tmp/docker-magento-dbdump.sql
+echo "SET FOREIGN_KEY_CHECKS=0;" > /tmp/docker-magento-dbdump.sql
+
+if [ -f env/dbdump.sql ]; then
+  echo "Making temporary copy of database file..."
+  cat env/dbdump.sql >> /tmp/docker-magento-dbdump.sql
+elif [ -f env/dbdump.gz ]; then
+  echo "Decompressing database dump..."
+  gunzip -c env/dbdump.gz >> /tmp/docker-magento-dbdump.sql
+else
+  echo "Somehow bypassed checks for dbdump file?"
+  exit
+fi
+
+echo "Adding in fixes for known database dump issues..."
+echo "- Fix CRLF..."
+sed -i 's/\r//g' /tmp/docker-magento-dbdump.sql
+echo "- Fix charset issues..."
+sed -ir 's/CHARSET=[a-z0-9_]+ COLLATE=[a-z0-9_]+/CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci/g' /tmp/docker-magento-dbdump.sql
+echo "- Fix foreign key constraint errors..."
+sed -ir '$!N;s/^\(\s*[^C].*\),\n\s*CONSTRAINT.*FOREIGN KEY.*$/\1/;P;D' /tmp/docker-magento-dbdump.sql
+sed -ir 's/\(CONSTRAINT .* FOREIGN KEY .*\)$/\/\* \1 \*\//g' /tmp/docker-magento-dbdump.sql
+
+echo "Importing database dump..."
+bin/mysql < /tmp/docker-magento-dbdump.sql
+
+echo "Database fix: Creating default Administrators role..."
+touch /tmp/docker-magento-dbfixes.sql
+echo "INSERT INTO authorization_role (role_id, parent_id, tree_level, sort_order, role_type, user_id, user_type, role_name) VALUES (1, 0, 1, 1, 'G', 0, '2', 'Administrators');" >> /tmp/docker-magento-dbfixes.sql
+echo "INSERT INTO authorization_rule (rule_id, role_id, resource_id, privileges, permission) VALUES (1, 1, 'Magento_Backend::all', null, 'allow');" >> /tmp/docker-magento-dbfixes.sql
+bin/mysql < /tmp/docker-magento-dbfixes.sql
+
+echo "Cleaning up temporary files..."
+rm /tmp/docker-magento-dbdump.sql
+rm /tmp/docker-magento-dbfixes.sql
+
+bin/npm install --prefix app/design/frontend/Gamesmen/gamesmen/web/tailwind
+bin/tailwind
+bin/magento setup:upgrade
+bin/magento setup:di:compile
+bin/magento app:config:import
+bin/magento config:set --scope default web/cookie/cookie_domain magento2.test
+bin/magento indexer:reindex
+bin/copyfromcontainer --all
+bin/magento admin:user:create --admin-user="$MAGENTO_ADMIN_USER" --admin-password="$MAGENTO_ADMIN_PASSWORD" --admin-email="$MAGENTO_ADMIN_EMAIL" --admin-firstname="$MAGENTO_ADMIN_FIRST_NAME" --admin-lastname="$MAGENTO_ADMIN_LAST_NAME"
+bin/stop
+bin/start

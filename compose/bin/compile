@@ -12,7 +12,7 @@ bin/magento cache:flush
 bin/composer install
 bin/magento setup:upgrade
 bin/magento setup:di:compile
-# bin/magento setup:static-content:deploy -f
+bin/tailwind
 bin/magento setup:static-content:deploy --language en_US --area adminhtml --no-interaction --force --no-ansi
 bin/magento setup:static-content:deploy --language en_AU --no-interaction --force --no-ansi
 bin/redis redis-cli flushall
