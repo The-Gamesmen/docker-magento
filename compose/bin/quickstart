@@ -75,6 +75,8 @@ echo "- Fix CRLF..."
 sed -i 's/\r//g' /tmp/docker-magento-dbdump.sql
 echo "- Fix charset issues..."
 sed -ir 's/CHARSET=[a-z0-9_]+ COLLATE=[a-z0-9_]+/CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci/g' /tmp/docker-magento-dbdump.sql
+echo "- Fix 'enable the sandbox mode' errors..."
+sed -ir 's|/\*M!999999\\- enable the sandbox mode \*/||g' /tmp/docker-magento-dbdump.sql
 echo "- Fix foreign key constraint errors..."
 sed -ir '$!N;s/^\(\s*[^C].*\),\n\s*CONSTRAINT.*FOREIGN KEY.*$/\1/;P;D' /tmp/docker-magento-dbdump.sql
 sed -ir 's/\(CONSTRAINT .* FOREIGN KEY .*\)$/\/\* \1 \*\//g' /tmp/docker-magento-dbdump.sql
