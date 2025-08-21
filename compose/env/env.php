@@ -222,8 +222,8 @@ return [
             'catalog' => [
                 'search' => [
                     'engine' => '{SEARCH_ENGINE}',
-                    'elasticsearch7_server_hostname' => '{SEARCH_ENGINE_HOST}',
-                    'elasticsearch7_server_port' => '{SEARCH_ENGINE_PORT}'
+                    'opensearch_server_hostname' => '{SEARCH_ENGINE_HOST}',
+                    'opensearch_server_port' => '{SEARCH_ENGINE_PORT}'
                 ]
             ],
             'cookie' => [

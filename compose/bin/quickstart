@@ -5,6 +5,7 @@ EDITION=${2:-enterprise}
 
 source env/packagist.env
 source env/magento.env
+source env/gamesmen.env
 
 function ask_yes_or_no() {
     read -p "$1 ([y]es or [N]o): "
@@ -91,12 +92,12 @@ echo "Cleaning up temporary files..."
 rm /tmp/docker-magento-dbdump.sql
 rm /tmp/docker-magento-dbfixes.sql
 
+bin/setup-domain "$FRONTEND_URL"
 bin/npm install --prefix app/design/frontend/Gamesmen/gamesmen/web/tailwind
 bin/tailwind
-bin/magento setup:upgrade
-bin/magento setup:di:compile
 bin/magento app:config:import
-bin/magento config:set --scope default web/cookie/cookie_domain magento2.test
+bin/magento config:set --scope default web/cookie/cookie_domain "$FRONTEND_URL"
+bin/compile
 bin/magento indexer:reindex
 bin/copyfromcontainer --all
 bin/magento admin:user:create --admin-user="$MAGENTO_ADMIN_USER" --admin-password="$MAGENTO_ADMIN_PASSWORD" --admin-email="$MAGENTO_ADMIN_EMAIL" --admin-firstname="$MAGENTO_ADMIN_FIRST_NAME" --admin-lastname="$MAGENTO_ADMIN_LAST_NAME"

@@ -4,7 +4,8 @@ source env/gamesmen.env
 source env/db.env
 source env/rabbitmq.env
 source env/redis.env
-source env/elasticsearch.env
+#source env/elasticsearch.env
+source env/opensearch.env
 
 AMPQ_HOST="$RABBITMQ_HOST"
 AMPQ_PORT="$RABBITMQ_PORT"
@@ -31,9 +32,9 @@ SESSION_CACHE_PORT="6379"
 SESSION_CACHE_PASSWORD=""
 SESSION_CACHE_DB="2"
 
-SEARCH_ENGINE="elasticsearch7"
-SEARCH_ENGINE_HOST="$ES_HOST"
-SEARCH_ENGINE_PORT="$ES_PORT"
+SEARCH_ENGINE="opensearch"
+SEARCH_ENGINE_HOST="$OPENSEARCH_HOST"
+SEARCH_ENGINE_PORT="$OPENSEARCH_PORT"
 
 cp env/env.php src/app/etc/env.php
 cp env/config.php src/app/etc/config.php
